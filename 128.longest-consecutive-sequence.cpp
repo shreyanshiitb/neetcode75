@@ -8,40 +8,34 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-class Solution {
+class Solution
+{
 private:
-    unordered_map<int,int> m;
-    unordered_set<int> vis;
 public:
-
-    int dfs(int k)
+    int longestConsecutive(vector<int> &nums)
     {
-        if(vis.count(k)){
-            return m[k];
-        }
-
-        vis.insert(k);
-
-        if(m.count(k+1)){
-            return m[k] = 1 + dfs(k+1);
-        }
-
-        return m[k];
-    }
-
-    int longestConsecutive(vector<int>& nums) {
-
-        for(int i:nums){
-            if(!m.count(i))
-                m[i]++;
+        unordered_set<int> m;
+        for (int i : nums)
+        {
+            m.insert(i);
         }
 
         int ans = 0;
-        for(auto &[k,v]:m){
-            ans = max(ans, dfs(k));
+        for (auto k : m)
+        {
+            int currAns = 1;
+            if (!m.count(k - 1))
+            {
+                int _k = k;
+                while (m.count(_k + 1))
+                {
+                    currAns++;
+                    _k++;
+                }
+                ans = max(ans, currAns);
+            }
         }
         return ans;
     }
 };
 // @lc code=end
-
