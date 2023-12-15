@@ -14,33 +14,36 @@ public:
     vector<int> topKFrequent(vector<int> &nums, int k)
     {
         unordered_map<int, int> m;
+        int maxCount = INT_MIN;
         for (int num : nums)
         {
             m[num]++;
+            maxCount = max(maxCount,m[num]);
         }
 
-        auto comp = [&m](int n1, int n2){
-            return m[n1] > m[n2];
-        };
-
-        priority_queue<int, vector<int>, decltype(comp)> q(comp);
-
-        for (auto &[key, val] : m)
+        // maxCount is bounded by nums.size()
+        vector<vector<int>> buckets(maxCount+1);
+        for (auto &[key,val]:m)
         {
-            q.push(key);
-            if(q.size() > k){
-                q.pop();
-            }
+            buckets[val].push_back(key);
         }
 
         vector<int> ans;
-        for (int i = 0; i < k; i++)
+        // O(n+k)
+        for (auto it = buckets.rbegin(); it != buckets.rend(); it++)
         {
-            ans.push_back(q.top());
-            q.pop();
+            auto bucket = *it;
+            if(!bucket.empty())
+            {
+                for(auto topKVal:bucket)
+                {
+                    ans.push_back(topKVal);
+                    if(ans.size() == k) return ans;
+                }
+            }
         }
 
-        return ans;
+        return {};
     }
 };
 // @lc code=end
