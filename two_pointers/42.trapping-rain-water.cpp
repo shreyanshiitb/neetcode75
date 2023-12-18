@@ -14,25 +14,26 @@ public:
     int trap(vector<int> &h)
     {
         int n = h.size();
-        vector<int> leftGreatest(n);
-        vector<int> rightGreatest(n);
         int ans = 0;
+        int l = 0, r = n - 1;
+        int lgr = h[l];
+        int rgr = h[r];
+        while (l < r)
+        {
+            if (lgr < rgr)
+            {
+                l++;
+                ans += max(0, lgr - h[l]);
+                lgr = max(lgr, h[l]);
+            }
+            else
+            {
+                r--;
+                ans += max(0, rgr - h[r]);
+                rgr = max(rgr, h[r]);
+            }
+        }
 
-        leftGreatest[0] = h[0];
-        rightGreatest[n - 1] = h[n - 1];
-        for (int i = 1; i < n; i++)
-        {
-            leftGreatest[i] = max(leftGreatest[i - 1], h[i]);
-        }
-        for (int i = n - 2; i >= 0; i--)
-        {
-            rightGreatest[i] = max(rightGreatest[i + 1], h[i]);
-        }
-
-        for (int i = 0; i < n; i++)
-        {
-            ans += min(leftGreatest[i], rightGreatest[i]) - h[i];
-        }
         return ans;
     }
 };
