@@ -13,14 +13,20 @@ class Solution
 public:
     int maxProfit(vector<int> &p)
     {
-
         int n = p.size();
-        int maxi = p[n - 1];
         int ans = 0;
-        for (int i = n - 2; i >= 0; i--)
+        int l = 0, r = l + 1;
+        while (r < n)
         {
-            ans = max(ans, max(0, maxi - p[i]));
-            maxi = max(maxi, p[i]);
+            if (p[r] <= p[l])
+            {
+                l = r;
+            }
+            else
+            {
+                ans = max(ans, p[r] - p[l]);
+            }
+            r++;
         }
         return ans;
     }
